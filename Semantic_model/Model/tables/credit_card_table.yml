@@ -1,0 +1,44 @@
+tables:
+  - name: credit_card_data
+    sql: {{ load_sql('credit_card_data') }}
+    description: "This table stores key details about the customers' hotel bookings."
+    public: true
+
+    
+    dimensions:
+      - name: Client_Num
+        type: number
+        column: Client_Num
+        description: "The unique number related to each client."
+
+      - name: Credit_Limit
+        type: number
+        column: Credit_Limit
+        description: "The credit limit related to each client."
+        primary_key: true
+
+      - name: Total_Trans_Amt
+        type: number
+        column: Total_Trans_Amt
+        description: "The credit limit related to each client."
+
+      - name: Delinquent_Acc
+        type: number
+        column: Delinquent_Acc
+        description: "The credit limit related to each client."
+
+    measures:
+      - name: total_delinquent_accounts
+        sql: "SUM(Delinquent_Acc)"
+        type: number
+        description: "The total number of delinquent accounts across all customers."
+
+      - name: total_clients
+        sql: "COUNT(DISTINCT Client_Num)"
+        type: number
+        description: "The total number of unique clients in the dataset."
+        
+      - name: avg_credit_limit
+        sql: "AVG(Credit_Limit)"
+        type: number
+        description: "The average credit limit across all customers."

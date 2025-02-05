@@ -1,0 +1,32 @@
+name: ccworkflowmonitorsiva
+version: v1alpha
+type: monitor
+tags:
+  - dataos:type:resource
+  - workflow-failed-monitor
+description: Attention! The workflow 'siva-data-ingestion-monitor-temp' in the Public Workspace has failed.Please check the logs for more details.
+layer: user
+monitor:
+  runAsUser: acies05
+  schedule: '*/5 * * * *'  # Runs every 5 minutes
+  timezone: UTC
+  incident:
+    incident_type: monitorerrorworkflow
+    name: monitorbuildfailed
+    severity: high
+  type: report_monitor
+  report:
+    source:
+      dataosInstance:
+        path: /collated/api/v1/reports/resources/runtime?id=workflow:v1:%25:public 
+    conditions:
+      - valueComparison:
+          observationType: runtime
+          valueJqFilter: '.value'
+          operator: equals
+          value: failed
+  actions:
+    - type: pager
+      pager:
+        name: sivafailedworkflowpager  # Triggers the pager for email notifications
+ 

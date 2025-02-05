@@ -1,0 +1,69 @@
+tables:
+  - name: customer_data
+    sql: {{ load_sql('customer_data') }}
+    description: "This table stores key details about the customers' related to credit card."
+    public: true
+    
+    joins:
+      - name: credit_card_data
+        relationship: one_to_many
+        sql: >
+          "{TABLE.Client_Num} = {credit_card_data.Client_Num}"
+
+    dimensions:
+      - name: Cust_Satisfaction_Score
+        type: number
+        column: Cust_Satisfaction_Score
+        description: "customer ssatisfaction score for each client number."
+        
+      - name: Client_Num
+        type: number
+        column: Client_Num
+        description: "The unique number related to each client."
+        primary_key: true
+
+      - name: Personal_loan
+        type: boolean
+        column: Personal_loan
+        description: "This discribes about the personal loan status."
+
+      - name: Customer_Job
+        type: string
+        column: Customer_Job
+        description: "This discribes about the type of job the customer occupied currently."
+
+      - name: Income
+        type: number
+        column: Income
+        description: "The total income of the client."
+
+    measures:
+      - name: total_clients
+        sql: "COUNT(DISTINCT Client_Num)"
+        type: number
+        description: "The total number of unique clients in the dataset."
+      
+      - name: avg_credit_limit
+        sql: "AVG(Credit_Limit)"
+        type: number
+        description: "The average credit limit across all customers."
+      
+      - name: total_transaction_amount
+        sql: "SUM(Total_Trans_Amt)"
+        type: number
+        description: "The total value of all transactions made by customers."
+
+      - name: total_delinquent_accounts
+        sql: "SUM(Delinquent_Acc)"
+        type: number
+        description: "The total number of delinquent accounts across all customers."
+      
+      - name: Delinquency_rate
+        sql: "SUM(Delinquent_Acc) * 1.0 / COUNT(DISTINCT Client_Num)"
+        type: number
+        description: "The percentage of customers who have at least one delinquent account."
+
+      - name: loan_penetration_rate
+        sql: "SUM(Personal_loan) * 1.0 / COUNT(DISTINCT Client_Num)"
+        type: number
+        description: "The percentage of customers who have taken a personal loan."

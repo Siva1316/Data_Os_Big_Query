@@ -1,0 +1,14 @@
+version: v1
+name: credit-insights-siva-pipeline 
+type: workflow
+tags:
+description: The "credit-insights-siva-pipeline" is a data pipeline related to customer data related to credit data
+workflow:
+  dag: 
+    - name: customer-data
+      file: Credit_Card_Insights/Data_Ingestion/Customer_data.yml
+
+    - name: credit-card-data
+      file: Credit_Card_Insights/Data_Ingestion/Credit_card_data.yml
+      dependencies:
+        - customer-data

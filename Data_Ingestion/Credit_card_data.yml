@@ -1,0 +1,57 @@
+# Data Ingestion
+version: v1  # v1
+name: siva-credit-data-cc
+type: workflow
+tags:
+  - crm
+description: Ingesting data into lakehouse
+workflow:
+  # schedule:
+  #   cron: '*/2 * * * *'
+  #   endOn: '2025-01-21T22:00:00Z'
+  #   concurrencyPolicy: Forbid
+  dag:
+    - name: dg-credit-data
+      # title: flatten Data Ingester
+      description: The job ingests credit data from big query to lakehouse
+      spec:
+        tags:
+          - crm
+        stack: flare:6.0
+        compute: runnable-default
+        stackSpec:
+          driver:
+            coreLimit: 2000m
+            cores: 2
+            memory: 3000m
+          executor:
+            coreLimit: 3000m
+            cores: 2
+            instances: 2
+            memory: 4000m
+          job:
+            explain: true
+            inputs:
+              - name: Credit_data
+                dataset: dataos://bigquerysiva:creditcard/credit_card_details
+                format: bigquery
+            logLevel: INFO
+            outputs:
+              - name: final
+                dataset: dataos://lakehouse:siva/credit_data_cc?acl=rw
+                format: Iceberg
+                options:
+                  saveMode: overwrite
+                  iceberg:
+                    properties:
+                      write.format.default: parquet
+                      write.metadata.compression-codec: gzip
+                title: credit data
+            steps:
+              - sequence:
+                  - name: final
+                    sql: >
+                      SELECT
+                       *
+                      FROM Credit_data
+             

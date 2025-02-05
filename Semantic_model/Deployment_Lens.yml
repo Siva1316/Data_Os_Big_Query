@@ -1,0 +1,78 @@
+# RESOURCE META SECTION
+name: customer-credit-lens-siva # Lens Resource name (mandatory)
+version: v1alpha # Lens manifest version (mandatory)
+layer: user # DataOS Layer (optional)
+type: lens # Type of Resource (mandatory)
+tags: # Tags (optional)
+  - lens
+  - customer credit insights
+description: This data model provides comprehensive insights for customer data related to credits. # Lens Resource description (optional)
+
+# LENS-SPECIFIC SECTION
+lens:
+  compute: runnable-default # Compute Resource that Lens should utilize (mandatory)
+  secrets: 
+    - name: sivagithub-r # Referred Instance Secret name (mandatory)
+      allKeys: true # All keys within the secret are required or not (optional)
+
+# Data Source configuration      
+  source: 
+    type: minerva # Source type (could be themis, minerva flash as well)
+    name: miniature # Source name (name of the depot)
+    catalog: lakehouse # Catalog name for the depot
+    
+  repo: # Lens model code repository configuration (mandatory)
+    type: git # Added repository type
+    url: https://github.com/Siva1316/Practise_data_HandsOn # URL of repository containing the Lens model (mandatory)
+    lensBaseDir: Practise_data_HandsOn/Sematic_model/Model # Relative path of the Lens 'model' directory in repository (mandatory)
+    syncFlags: # Additional flags used during synchronization (optional)
+      - --ref=main # Repository Branch (optional)
+
+# API Instances configuration
+  api:  #(optional)
+    replicas: 1 # Number of API instance replicas (optional)
+    logLevel: info # Logging granularity (optional)
+    resources: # CPU and memory configurations for API Instances (optional)
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 1000m
+        memory: 1024Mi # Fixed memory unit
+
+# Worker configuration
+  worker:  #(optional)
+    replicas: 1 # Number of Worker replicas (optional)
+    logLevel: debug # Logging level for Worker (optional)
+    resources: # CPU and memory configurations for Worker (optional)
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 1000m
+        memory: 1248Mi
+
+# Router configuration
+  router:  #(optional)
+    logLevel: info # Level of log detail for Router (optional)
+    resources: # CPU and memory resource specifications for the router (optional)
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 1000m
+        memory: 2048Mi # Fixed memory unit
+
+#Iris configuration 
+ iris: #(optional)
+   logLevel: info # Log level for Iris (optional)
+   resources: # CPU and memory resource specifications for the iris board (optional)
+     requests:
+       cpu: 200m
+       memory: 256Mi
+     limits:
+      cpu: 1600m
+       memory: 2240Mi
+#Metric configuration 
+metric:                         #(optional)
+  logLevel: info # Log level for metrics (optional)

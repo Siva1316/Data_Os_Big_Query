@@ -1,0 +1,56 @@
+# Data Ingestion
+version: v1  # v1
+name: siva-customer-data-cc
+type: workflow
+tags:
+  - crm
+description: Ingesting data into lakehouse
+workflow:
+  # schedule:
+  #   cron: '*/2 * * * *'
+  #   endOn: '2025-01-21T22:00:00Z'
+  #   concurrencyPolicy: Forbid
+  dag:
+    - name: dg-customer-data
+      # title: flatten Data Ingester
+      # description: The job ingests Adobe flatten data from S3 into icebase zone
+      spec:
+        tags:
+          - crm
+        stack: flare:6.0
+        compute: runnable-default
+        stackSpec:
+          driver:
+            coreLimit: 2000m
+            cores: 2
+            memory: 3000m
+          executor:
+            coreLimit: 3000m
+            cores: 2
+            instances: 2
+            memory: 4000m
+          job:
+            explain: true
+            inputs:
+              - name: Customer_data
+                dataset: dataos://bigquerysiva:creditcard/customer_detail
+                format: bigquery
+            logLevel: INFO
+            outputs:
+              - name: final
+                dataset: dataos://lakehouse:siva/costomer_data_cc?acl=rw
+                format: Iceberg
+                options:
+                  saveMode: overwrite
+                  iceberg:
+                    properties:
+                      write.format.default: parquet
+                      write.metadata.compression-codec: gzip
+                title: customer data
+            steps:
+              - sequence:
+                  - name: final
+                    sql: >
+                      SELECT
+                        *
+                      FROM Customer_data;

@@ -1,0 +1,37 @@
+name: ccworkflowpagersiva
+version: v1alpha
+type: pager
+tags:
+  - dataos:type:resource
+  - workflow-failed-pager
+description: This is for sending Alerts via email.
+workspace: public
+pager:
+  conditions:
+    - valueJqFilter: .properties.name
+      operator: equals
+      value: monitorbuildfailed
+  output:
+    email:
+      emailTargets:
+        - acies05@partners.ext-tmdc.io  # Alert to email addresses based on the monitor condition
+      subject: "⚠️ Alert: Workflow Quality Check Failure Detected"
+      body: |
+        Dear Team,
+
+        An issue has been detected in the data workflow. Please review the details below:
+
+        📅 **Record Time:** {{ .CreateTime }}
+        ⚠️ **Severity Level:** {{ .Properties.severity }}
+
+        **Issue Details:**  
+        A Quality Check Failure has been identified. Recent checks revealed inconsistencies in the data. Immediate action is required to maintain data integrity.
+
+        **Next Steps:**  
+        - Review the error logs  
+        - Identify and fix the root cause  
+        - Confirm data integrity post-resolution  
+        - Notify the team once resolved  
+
+        Regards,  
+        Automated Monitoring System

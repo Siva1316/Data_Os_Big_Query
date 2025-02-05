@@ -1,0 +1,75 @@
+name: customer-quality-check-siva
+version: v1
+type: workflow
+tags:
+  - workflow
+  - soda-checks
+description: Applying quality checks for the custoomer data
+workspace: public
+workflow:
+  # schedule:
+  #   cron: '00 08 * * *'
+  #  # endOn: '2023-12-12T22:00:00Z'
+  #   concurrencyPolicy: Forbid
+  dag:
+    - name: soda-customer-quality
+      spec:
+        stack: soda+python:1.0
+        compute: runnable-default
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 250Mi
+          limits:
+            cpu: 1000m
+            memory: 250Mi
+        logLevel: INFO # WARNING, ERROR, DEBUG
+        stackSpec:
+          inputs:
+            - dataset: dataos://lakehouse:siva/costomer_data_cc
+              options:
+                engine: minerva
+                clusterName: miniature
+              checks:  
+                - schema:
+                    name: Schema Validation for data types
+                    fail:
+                      when wrong column type:
+                        Client_Num: long
+                        Personal_loan: boolean
+                        Customer_Job: string
+                        Income: long
+                        Cust_Satisfaction_Score: long
+                    attributes:
+                      category: Schema
+
+                - invalid_count(Client_Num) = 0:
+                    name: Client number should not be null
+                    valid min: 1
+                    attributes:
+                      category: Validity
+
+                - missing_count(Client_Num) = 0:
+                    name: Client number should not be missing
+                    attributes:
+                      category: Completeness
+
+                - duplicate_count(Client_Num) = 0:
+                    name: Client number should not be duplicated
+                    attributes:
+                      category: Uniqueness
+
+                - avg(Income) > 20000:
+                    name: Average Income should be greater than 20,000
+                    attributes:
+                      category: Accuracy
+
+                - min(Cust_Satisfaction_Score) >= 0:
+                    name: Customer Satisfaction Score should not be negative
+                    attributes:
+                      category: Validity
+
+                - max(Cust_Satisfaction_Score) <= 10:
+                    name: Customer Satisfaction Score should be within 0-10 range
+                    attributes:
+                      category: Business Rule

@@ -1,0 +1,20 @@
+name: siva-handson-bundle-updated
+version: v1beta
+type: bundle
+tags:
+  - dataproduct
+description: This bundle resource is for the product affinity data product.
+layer: "user"
+bundle:
+  resources:
+    - id: lens
+      file: C:\Users\DELL\Desktop\DataOS\dataos-ctl-windows-amd64\windows-amd64\Practise_Data_Os\Sematic_model\Deployment_Lens.yml
+      workspace: public
+
+    - id: hotel_click_booking_updated
+      file: C:\Users\DELL\Desktop\DataOS\dataos-ctl-windows-amd64\windows-amd64\Practise_Data_Os\Data_Ingestion_Folder\Data_Ingestion_HCB.yml
+      workspace: public
+      
+    - id: hotel_booking-updated
+      file: C:\Users\DELL\Desktop\DataOS\dataos-ctl-windows-amd64\windows-amd64\Practise_Data_Os\Data_Ingestion_Folder\Data_Ingestion_Loc_Hiery.yml
+      workspace: public

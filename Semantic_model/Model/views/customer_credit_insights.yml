@@ -1,0 +1,30 @@
+views:
+  - name: customer_credit_insights
+    description: "This metric calculates the credit data related to customers."
+    public: true
+    meta:
+      title: Customer credit insights
+      tags:
+        - DPDomain.Analysis
+        - DPDomain.credit card insights
+    metric:
+      expression: "*/45 * * * *"
+      timezone: "UTC"
+      window: "day"
+    tables:
+      - join_path: customer_table
+        prefix: true
+        includes: 
+          - Client_Num
+          - Personal_loan
+          - Customer_Job
+          - Income
+          - Cust_Satisfaction_Score
+    
+      - join_path: credit_card_table
+        prefix: true
+        includes:
+          - Client_Num
+          - Credit_Limit
+          - Total_Trans_Amt
+          - Delinquent_Acc

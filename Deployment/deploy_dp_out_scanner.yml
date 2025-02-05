@@ -1,0 +1,28 @@
+version: v1
+name: siva-handsondp-scan-updated
+type: workflow
+tags:
+  - scanner
+  - data-product
+description: The job scans data product from poros
+workflow:
+  # schedule:
+  #   cron: '*/20 * * * *'
+  #   concurrencyPolicy: Forbid
+  dag:
+    - name: scan-data-product-job
+      description: The job scans data-product from poros and register data to metis
+      spec:
+        tags:
+          - scanner2
+        stack: scanner:2.0
+        compute: runnable-default
+        stackSpec:
+          type: data-product
+          sourceConfig:
+            config:
+              type: DataProduct
+              markDeletedDataProducts: true
+              dataProductFilterPattern:
+                includes:
+                 - siva-datahandson-dp-updated

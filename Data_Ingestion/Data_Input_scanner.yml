@@ -1,0 +1,16 @@
+version: v1
+name: bigquerysivascanner
+type: workflow
+tags:
+  - bigquery
+  - scanner
+description: The job scans schema tables and register metadata
+workflow:
+  dag:
+    - name: bigquerydepotjob
+      description: The job scans schema from bigquery depot tables and register metadata to metis
+      spec:
+        stack: scanner:2.0
+        compute: runnable-default
+        stackSpec:
+          depot: bigquerysiva          # Postgres depot name

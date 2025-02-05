@@ -1,0 +1,56 @@
+name: siva-datahandson-dp-updated
+version: v1beta
+entity: product
+type: data
+tags:
+  - DPDomain.hotelbooking
+  - DPUsecase.Customer Segmentation
+  - DPUsecase.Handson
+
+description: Hotel booking insights.
+
+refs:
+- title: sivahandsondp
+  href: https://dataos.info/interfaces/cli/command_reference/#workspace
+
+v1beta:
+  data:
+    meta:
+      title: siva hands on dp
+      sourceCodeUrl: https://github.com/Siva1316/Practise_Data_Os
+      trackerUrl: https://rubikai.atlassian.net/browse/DPRB-65
+ 
+    collaborators:
+      - name: Siva_Acies_05
+        description: owner
+    
+    resource:
+      refType: dataos
+      ref: bundle:v1beta:siva-handson-bundle
+
+    inputs:
+      - refType: dataos
+        ref: dataos://lakehouse:siva/hotel_booking_v1
+
+      - refType: dataos
+        ref: dataos://lakehouse:siva/hotel_click_booking_v1
+
+      - refType: dataos
+        ref: dataos://lakehouse:siva/vm_user_location_v1
+
+    outputs:
+      - refType: dataos
+        ref: dataos://lakehouse:siva/hotel_insights
+
+    ports:
+      lens:
+        ref: lens:v1alpha:siva-handson-bundle-updated:public
+        refType: dataos
+
+    #   talos:
+    #     - ref: service:v1:product-affinity-api:public
+    #       refType: dataos
+
+
+
+      
