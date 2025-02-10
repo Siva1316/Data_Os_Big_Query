@@ -11,6 +11,8 @@ views:
       expression: "*/45 * * * *"
       timezone: "UTC"
       window: "day"
+      excludes: 
+         - Customer_Job
       
     tables:
       - join_path: customer_data
