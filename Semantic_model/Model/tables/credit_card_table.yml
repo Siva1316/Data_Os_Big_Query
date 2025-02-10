@@ -1,31 +1,63 @@
 tables:
   - name: credit_card_data
     sql: {{ load_sql('credit_card_data') }}
-    description: "This table stores key details about the customers' hotel bookings."
+    description: "This table stores key details about customers' credit card transactions and risk assessment."
     public: true
 
-    
     dimensions:
       - name: Client_Num
         type: number
         column: Client_Num
-        description: "The unique number related to each client."
+        description: "The unique identifier for each client."
+        primary_key: true
 
       - name: Credit_Limit
         type: number
         column: Credit_Limit
-        description: "The credit limit related to each client."
-        primary_key: true
+        description: "The maximum credit limit assigned to the customer."
 
       - name: Total_Trans_Amt
         type: number
         column: Total_Trans_Amt
-        description: "The credit limit related to each client."
+        description: "Total transaction amount for the customer."
+
+      - name: Avg_Utilization_Ratio
+        type: number
+        column: Avg_Utilization_Ratio
+        description: "The average credit utilization ratio of the customer."
+
+      - name: Total_Revolving_Bal
+        type: number
+        column: Total_Revolving_Bal
+        description: "The total revolving balance of the customer."
 
       - name: Delinquent_Acc
         type: number
         column: Delinquent_Acc
-        description: "The credit limit related to each client."
+        description: "The number of delinquent accounts for the customer."
+
+      - name: Risk_Score
+        type: number
+        sql: |
+          (0.4 * Avg_Utilization_Ratio + 
+           0.3 * Total_Revolving_Bal + 
+           0.5 * Delinquent_Acc - 
+           0.2 * Credit_Limit - 
+           0.1 * Total_Trans_Amt)
+        description: "A calculated score indicating the risk level of a customer."
+
+      - name: Risk_Category
+        type: string
+        sql: |
+          CASE 
+            WHEN (0.4 * Avg_Utilization_Ratio + 
+                  0.3 * Total_Revolving_Bal + 
+                  0.5 * Delinquent_Acc - 
+                  0.2 * Credit_Limit - 
+                  0.1 * Total_Trans_Amt) > 0.7 THEN 'Risky'
+            ELSE 'Not Risky'
+          END
+        description: "Categorization of customers based on their Risk Score."
 
     measures:
       - name: total_delinquent_accounts
@@ -37,8 +69,37 @@ tables:
         sql: "COUNT(DISTINCT Client_Num)"
         type: number
         description: "The total number of unique clients in the dataset."
-        
+
       - name: avg_credit_limit
         sql: "AVG(Credit_Limit)"
         type: number
         description: "The average credit limit across all customers."
+
+      - name: avg_risk_score
+        sql: "AVG(0.4 * Avg_Utilization_Ratio + 0.3 * Total_Revolving_Bal + 0.5 * Delinquent_Acc - 0.2 * Credit_Limit - 0.1 * Total_Trans_Amt)"
+        type: number
+        description: "The average risk score of all customers."
+
+      - name: total_risky_customers
+        sql: |
+          COUNT(DISTINCT CASE 
+            WHEN (0.4 * Avg_Utilization_Ratio + 
+                  0.3 * Total_Revolving_Bal + 
+                  0.5 * Delinquent_Acc - 
+                  0.2 * Credit_Limit - 
+                  0.1 * Total_Trans_Amt) > 0.7 THEN Client_Num 
+          END)
+        type: number
+        description: "The total number of customers categorized as 'Risky'."
+
+      - name: risky_customer_percentage
+        sql: |
+          (COUNT(DISTINCT CASE 
+            WHEN (0.4 * Avg_Utilization_Ratio + 
+                  0.3 * Total_Revolving_Bal + 
+                  0.5 * Delinquent_Acc - 
+                  0.2 * Credit_Limit - 
+                  0.1 * Total_Trans_Amt) > 0.7 THEN Client_Num 
+          END) * 100.0) / COUNT(DISTINCT Client_Num)
+        type: number
+        description: "The percentage of customers who are categorized as 'Risky'."

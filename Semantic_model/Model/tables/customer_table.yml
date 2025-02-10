@@ -1,9 +1,10 @@
 tables:
   - name: customer_data
     sql: {{ load_sql('customer_data') }}
-    description: "This table stores key details about the customers' related to credit card."
+    description: "This table stores key details about customers related to credit cards."
     public: true
     
+    # Joining with credit_card_data to access risk metrics
     joins:
       - name: credit_card_data
         relationship: one_to_many
@@ -11,55 +12,103 @@ tables:
           "{TABLE.Client_Num} = {credit_card_data.Client_Num}"
 
     dimensions:
-      - name: Cust_Satisfaction_Score
-        type: number
-        column: Cust_Satisfaction_Score
-        description: "customer ssatisfaction score for each client number."
-        
       - name: Client_Num
         type: number
         column: Client_Num
-        description: "The unique number related to each client."
+        description: "The unique identifier for each client."
         primary_key: true
+
+      - name: Cust_Satisfaction_Score
+        type: number
+        column: Cust_Satisfaction_Score
+        description: "Customer satisfaction score for each client."
 
       - name: Personal_loan
         type: boolean
         column: Personal_loan
-        description: "This discribes about the personal loan status."
+        description: "Indicates whether the customer has a personal loan."
 
       - name: Customer_Job
         type: string
         column: Customer_Job
-        description: "This discribes about the type of job the customer occupied currently."
+        description: "The type of job the customer is currently employed in."
 
       - name: Income
         type: number
         column: Income
-        description: "The total income of the client."
+        description: "The total income of the customer."
+
+      - name: Credit_Limit
+        type: number
+        column: credit_card_data.Credit_Limit
+        description: "The credit limit assigned to the customer."
+
+      - name: Total_Trans_Amt
+        type: number
+        column: credit_card_data.Total_Trans_Amt
+        description: "Total transaction amount for the customer."
+
+      - name: Avg_Utilization_Ratio
+        type: number
+        column: credit_card_data.Avg_Utilization_Ratio
+        description: "The average credit utilization ratio of the customer."
+
+      - name: Total_Revolving_Bal
+        type: number
+        column: credit_card_data.Total_Revolving_Bal
+        description: "The total revolving balance of the customer."
+
+      - name: Delinquent_Acc
+        type: number
+        column: credit_card_data.Delinquent_Acc
+        description: "The number of delinquent accounts for the customer."
+
+      - name: Risk_Score
+        type: number
+        sql: |
+          (0.4 * credit_card_data.Avg_Utilization_Ratio + 
+           0.3 * credit_card_data.Total_Revolving_Bal + 
+           0.5 * credit_card_data.Delinquent_Acc - 
+           0.2 * credit_card_data.Credit_Limit - 
+           0.1 * credit_card_data.Total_Trans_Amt)
+        description: "A calculated score indicating the risk level of a customer."
+
+      - name: Risk_Category
+        type: string
+        sql: |
+          CASE 
+            WHEN (0.4 * credit_card_data.Avg_Utilization_Ratio + 
+                  0.3 * credit_card_data.Total_Revolving_Bal + 
+                  0.5 * credit_card_data.Delinquent_Acc - 
+                  0.2 * credit_card_data.Credit_Limit - 
+                  0.1 * credit_card_data.Total_Trans_Amt) > 0.7 THEN 'Risky'
+            ELSE 'Not Risky'
+          END
+        description: "Categorization of customers based on their Risk Score."
 
     measures:
       - name: total_clients
         sql: "COUNT(DISTINCT Client_Num)"
         type: number
         description: "The total number of unique clients in the dataset."
-      
+
       - name: avg_credit_limit
-        sql: "AVG(Credit_Limit)"
+        sql: "AVG(credit_card_data.Credit_Limit)"
         type: number
         description: "The average credit limit across all customers."
-      
+
       - name: total_transaction_amount
-        sql: "SUM(Total_Trans_Amt)"
+        sql: "SUM(credit_card_data.Total_Trans_Amt)"
         type: number
         description: "The total value of all transactions made by customers."
 
       - name: total_delinquent_accounts
-        sql: "SUM(Delinquent_Acc)"
+        sql: "SUM(credit_card_data.Delinquent_Acc)"
         type: number
         description: "The total number of delinquent accounts across all customers."
-      
-      - name: Delinquency_rate
-        sql: "SUM(Delinquent_Acc) * 1.0 / COUNT(DISTINCT Client_Num)"
+
+      - name: delinquency_rate
+        sql: "SUM(credit_card_data.Delinquent_Acc) * 1.0 / COUNT(DISTINCT Client_Num)"
         type: number
         description: "The percentage of customers who have at least one delinquent account."
 
@@ -67,3 +116,32 @@ tables:
         sql: "SUM(Personal_loan) * 1.0 / COUNT(DISTINCT Client_Num)"
         type: number
         description: "The percentage of customers who have taken a personal loan."
+
+      - name: avg_risk_score
+        sql: "AVG(0.4 * credit_card_data.Avg_Utilization_Ratio + 0.3 * credit_card_data.Total_Revolving_Bal + 0.5 * credit_card_data.Delinquent_Acc - 0.2 * credit_card_data.Credit_Limit - 0.1 * credit_card_data.Total_Trans_Amt)"
+        type: number
+        description: "The average risk score of all customers."
+
+      - name: total_risky_customers
+        sql: |
+          COUNT(DISTINCT CASE 
+            WHEN (0.4 * credit_card_data.Avg_Utilization_Ratio + 
+                  0.3 * credit_card_data.Total_Revolving_Bal + 
+                  0.5 * credit_card_data.Delinquent_Acc - 
+                  0.2 * credit_card_data.Credit_Limit - 
+                  0.1 * credit_card_data.Total_Trans_Amt) > 0.7 THEN Client_Num 
+          END)
+        type: number
+        description: "The total number of customers categorized as 'Risky'."
+
+      - name: risky_customer_percentage
+        sql: |
+          (COUNT(DISTINCT CASE 
+            WHEN (0.4 * credit_card_data.Avg_Utilization_Ratio + 
+                  0.3 * credit_card_data.Total_Revolving_Bal + 
+                  0.5 * credit_card_data.Delinquent_Acc - 
+                  0.2 * credit_card_data.Credit_Limit - 
+                  0.1 * credit_card_data.Total_Trans_Amt) > 0.7 THEN Client_Num 
+          END) * 100.0) / COUNT(DISTINCT Client_Num)
+        type: number
+        description: "The percentage of customers who are categorized as 'Risky'."

@@ -4,6 +4,10 @@ type: workflow
 tags:
 description: The "credit-insights-siva-pipeline" is a data pipeline related to customer data related to credit data
 workflow:
+  # schedule:
+  #   cron: '*/2 * * * *'
+  #   endOn: '2025-01-21T22:00:00Z'
+  #   concurrencyPolicy: Forbid
   dag: 
     - name: customer-data
       file: Credit_Card_Insights/Data_Ingestion/Customer_data.yml

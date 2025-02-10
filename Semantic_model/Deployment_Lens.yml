@@ -23,8 +23,8 @@ lens:
     
   repo: # Lens model code repository configuration (mandatory)
     type: git # Added repository type
-    url: https://github.com/Siva1316/Practise_data_HandsOn # URL of repository containing the Lens model (mandatory)
-    lensBaseDir: Practise_data_HandsOn/Sematic_model/Model # Relative path of the Lens 'model' directory in repository (mandatory)
+    url: https://github.com/Siva1316/Data_Os_Big_Query # URL of repository containing the Lens model (mandatory)
+    lensBaseDir: Sematic_model/Model # Relative path of the Lens 'model' directory in repository (mandatory)
     syncFlags: # Additional flags used during synchronization (optional)
       - --ref=main # Repository Branch (optional)
 
@@ -64,15 +64,15 @@ lens:
         memory: 2048Mi # Fixed memory unit
 
 #Iris configuration 
- iris: #(optional)
-   logLevel: info # Log level for Iris (optional)
-   resources: # CPU and memory resource specifications for the iris board (optional)
-     requests:
-       cpu: 200m
-       memory: 256Mi
-     limits:
-      cpu: 1600m
-       memory: 2240Mi
-#Metric configuration 
-metric:                         #(optional)
-  logLevel: info # Log level for metrics (optional)
+#  iris: #(optional)
+#    logLevel: info # Log level for Iris (optional)
+#    resources: # CPU and memory resource specifications for the iris board (optional)
+#      requests:
+#        cpu: 200m
+#        memory: 256Mi
+#      limits:
+#       cpu: 1600m
+#        memory: 2240Mi
+# #Metric configuration 
+# metric:                         #(optional)
+#   logLevel: info # Log level for metrics (optional)

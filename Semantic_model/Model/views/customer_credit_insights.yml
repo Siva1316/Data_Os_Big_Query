@@ -1,18 +1,19 @@
 views:
   - name: customer_credit_insights
-    description: "This metric calculates the credit data related to customers."
+    description: "This view provides insights into customer credit risk, transactions, and credit behavior."
     public: true
     meta:
-      title: Customer credit insights
+      title: Customer Credit Insights
       tags:
         - DPDomain.Analysis
-        - DPDomain.credit card insights
+        - DPDomain.CreditCardInsights
     metric:
       expression: "*/45 * * * *"
       timezone: "UTC"
       window: "day"
+      
     tables:
-      - join_path: customer_table
+      - join_path: customer_data
         prefix: true
         includes: 
           - Client_Num
@@ -20,11 +21,15 @@ views:
           - Customer_Job
           - Income
           - Cust_Satisfaction_Score
+          - Risk_Score
+          - Risk_Category
     
-      - join_path: credit_card_table
+      - join_path: credit_card_data
         prefix: true
         includes:
           - Client_Num
           - Credit_Limit
           - Total_Trans_Amt
           - Delinquent_Acc
+          - Avg_Utilization_Ratio
+          - Total_Revolving_Bal
