@@ -3,7 +3,7 @@ views:
     description: "This view provides insights into customer credit risk, transactions, and credit behavior."
     public: true
     meta:
-      title: Customer Credit Insights
+      title: Risky Customer Insights
       tags:
         - DPDomain.Analysis
         - DPDomain.CreditCardInsights

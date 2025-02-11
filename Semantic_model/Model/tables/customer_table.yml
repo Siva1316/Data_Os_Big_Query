@@ -64,7 +64,7 @@ tables:
         description: "The number of delinquent accounts for the customer."
       
       - name: Week_Start_Date
-        type: date
+        type: time
         column: Week_Start_Date
         description: "This columns describes the start date of the week"
 
