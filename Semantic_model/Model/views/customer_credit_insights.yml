@@ -1,0 +1,22 @@
+views:
+  - name: customer_credit_insights
+    description: "This view provides insights into customer credit risk, transactions, and credit behavior."
+    public: true
+    meta:
+      title: Customer Credit Insights
+      tags:
+        - DPDomain.Analysis
+        - DPDomain.CreditCardInsights
+      metric:
+        expression: "*/45 * * * *"
+        timezone: "UTC"
+        window: "day"
+
+    tables:
+      - join_path: customer_data
+        prefix: true
+        includes: 
+          - delinquency_rate  # measure
+          - Delinquent_Acc    # measure columns
+          - Client_Num        # Groupby column
+          - Week_Start_Date   # Timestamp

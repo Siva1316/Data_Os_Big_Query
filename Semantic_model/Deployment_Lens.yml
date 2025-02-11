@@ -11,9 +11,9 @@ description: This data model provides comprehensive insights for customer data r
 # LENS-SPECIFIC SECTION
 lens:
   compute: runnable-default # Compute Resource that Lens should utilize (mandatory)
-  # secrets: 
-  #   - name: sivagithub-r # Referred Instance Secret name (mandatory)
-  #     allKeys: true # All keys within the secret are required or not (optional)
+  secrets: 
+    - name: sivagithub-r # Referred Instance Secret name (mandatory)
+      allKeys: true # All keys within the secret are required or not (optional)
 
 # Data Source configuration      
   source: 
