@@ -5,7 +5,6 @@ views:
     meta:
       title: Customer Credit Insights
       tags:
-        - DPDomain.Analysis
         - DPDomain.CreditCardInsights
       metric:
         expression: "*/45 * * * *"
