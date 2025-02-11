@@ -5,6 +5,7 @@ SELECT
     Avg_Utilization_Ratio,
     Total_Revolving_Bal,
     Delinquent_Acc,
+    Week_Start_Date,
     
     -- Calculate Risk Score
     (0.4 * Avg_Utilization_Ratio + 

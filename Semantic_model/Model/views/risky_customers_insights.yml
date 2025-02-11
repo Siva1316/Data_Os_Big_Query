@@ -1,5 +1,5 @@
 views:
-  - name: customer_credit_insights
+  - name: risky_customer_insights
     description: "This view provides insights into customer credit risk, transactions, and credit behavior."
     public: true
     meta:
@@ -16,7 +16,11 @@ views:
       - join_path: customer_data
         prefix: true
         includes: 
-          - delinquency_rate  # measure
-          - Delinquent_Acc    # measure columns
+          - risky_customer_percentage  # measure
+          - Avg_Utilization_Ratio    # measure columns
+          - Total_Revolving_Bal
+          - Delinquent_Acc
+          - Credit_Limit
+          - Total_Trans_Amt
           - Client_Num        # Groupby column
           - Week_Start_Date   # Timestamp
