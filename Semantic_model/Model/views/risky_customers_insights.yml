@@ -7,10 +7,7 @@ views:
       tags:
         - DPDomain.Analysis
         - DPDomain.CreditCardInsights
-    refresh_schedule:  
-      expression: "*/45 * * * *"
-      timezone: "UTC"
-
+  
     tables:
       - join_path: customer_data
         prefix: true
