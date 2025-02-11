@@ -7,10 +7,10 @@ views:
       tags:
         - DPDomain.Analysis
         - DPDomain.CreditCardInsights
-    metric:
-      expression: "*/45 * * * *"
-      timezone: "UTC"
-      window: "day"
+      metric:
+       expression: "*/45 * * * *"
+       timezone: "UTC"
+       window: "day"
 
     tables:
       - join_path: customer_data
