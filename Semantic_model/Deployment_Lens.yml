@@ -11,9 +11,9 @@ description: This data model provides comprehensive insights for customer data r
 # LENS-SPECIFIC SECTION
 lens:
   compute: runnable-default # Compute Resource that Lens should utilize (mandatory)
-  secrets: 
-    - name: sivagithub-r # Referred Instance Secret name (mandatory)
-      allKeys: true # All keys within the secret are required or not (optional)
+  # secrets: 
+  #   - name: sivagithub-r # Referred Instance Secret name (mandatory)
+  #     allKeys: true # All keys within the secret are required or not (optional)
 
 # Data Source configuration      
   source: 
@@ -22,9 +22,8 @@ lens:
     catalog: lakehouse # Catalog name for the depot
     
   repo: # Lens model code repository configuration (mandatory)
-    type: git # Added repository type
-    url: https://github.com/Siva1316/Data_Os_Big_Query # URL of repository containing the Lens model (mandatory)
-    lensBaseDir: Data_Os_Big_Query/Sematic_model/Model # Relative path of the Lens 'model' directory in repository (mandatory)
+    url: https://github.com/Siva1316/Data_Os_Big_Query  # URL of repository containing the Lens model (mandatory)
+    lensBaseDir: Data_Os_Big_Query/Semantic_model/Model # Relative path of the Lens 'model' directory in repository (mandatory)
     syncFlags: # Additional flags used during synchronization (optional)
       - --ref=main # Repository Branch (optional)
 
@@ -62,4 +61,7 @@ lens:
       limits:
         cpu: 1000m
         memory: 2048Mi # Fixed memory unit
+  
+  metric:
+    logLevel: debug
 

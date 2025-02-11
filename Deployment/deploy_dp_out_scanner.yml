@@ -6,9 +6,6 @@ tags:
   - data-product
 description: The job scans data product from poros
 workflow:
-  # schedule:
-  #   cron: '*/20 * * * *'
-  #   concurrencyPolicy: Forbid
   dag:
     - name: scan-data-product-job
       description: The job scans data-product from poros and register data to metis
@@ -25,4 +22,4 @@ workflow:
               markDeletedDataProducts: true
               dataProductFilterPattern:
                 includes:
-                 - siva-datahandson-dp-updated
+                 - credircard-analysis-dp-siva

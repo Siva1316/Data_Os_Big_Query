@@ -1,13 +1,10 @@
-name: siva-datahandson-dp-updated
+name: credircard-analysis-dp-siva
 version: v1beta
 entity: product
 type: data
 tags:
-  - DPDomain.hotelbooking
-  - DPUsecase.Customer Segmentation
-  - DPUsecase.Handson
-
-description: Hotel booking insights.
+  - DPDomain.creditcardinsights
+description: credit card analysis.
 
 refs:
 - title: sivahandsondp
@@ -17,39 +14,31 @@ v1beta:
   data:
     meta:
       title: siva hands on dp
-      sourceCodeUrl: https://github.com/Siva1316/Practise_Data_Os
-      trackerUrl: https://rubikai.atlassian.net/browse/DPRB-65
+      sourceCodeUrl: https://github.com/Siva1316/Data_Os_Big_Query
  
     collaborators:
-      - name: Siva_Acies_05
+      - name: acies05
         description: owner
     
     resource:
       refType: dataos
-      ref: bundle:v1beta:siva-handson-bundle
+      ref: bundle:v1beta:credit-card-insights-bundle-siva
 
     inputs:
       - refType: dataos
-        ref: dataos://lakehouse:siva/hotel_booking_v1
+        ref: dataos://lakehouse:siva/credit_data_cc
 
       - refType: dataos
-        ref: dataos://lakehouse:siva/hotel_click_booking_v1
-
-      - refType: dataos
-        ref: dataos://lakehouse:siva/vm_user_location_v1
+        ref: dataos://lakehouse:siva/costomer_data_cc
 
     outputs:
       - refType: dataos
-        ref: dataos://lakehouse:siva/hotel_insights
+        ref: dataos://lakehouse:siva/customer_credit_Insights
 
     ports:
       lens:
-        ref: lens:v1alpha:siva-handson-bundle-updated:public
+        ref: lens:v1alpha:customer-credit-lens-siva:public
         refType: dataos
-
-    #   talos:
-    #     - ref: service:v1:product-affinity-api:public
-    #       refType: dataos
 
 
 

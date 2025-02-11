@@ -36,6 +36,22 @@ tables:
         column: Delinquent_Acc
         description: "The number of delinquent accounts for the customer."
 
+    measures:
+      - name: total_delinquent_accounts
+        sql: "SUM(Delinquent_Acc)"
+        type: number
+        description: "The total number of delinquent accounts across all customers."
+
+      - name: total_clients
+        sql: "COUNT(DISTINCT Client_Num)"
+        type: number
+        description: "The total number of unique clients in the dataset."
+
+      - name: avg_credit_limit
+        sql: "AVG(Credit_Limit)"
+        type: number
+        description: "The average credit limit across all customers."
+      
       - name: Risk_Score
         type: number
         sql: |
@@ -58,22 +74,6 @@ tables:
             ELSE 'Not Risky'
           END
         description: "Categorization of customers based on their Risk Score."
-
-    measures:
-      - name: total_delinquent_accounts
-        sql: "SUM(Delinquent_Acc)"
-        type: number
-        description: "The total number of delinquent accounts across all customers."
-
-      - name: total_clients
-        sql: "COUNT(DISTINCT Client_Num)"
-        type: number
-        description: "The total number of unique clients in the dataset."
-
-      - name: avg_credit_limit
-        sql: "AVG(Credit_Limit)"
-        type: number
-        description: "The average credit limit across all customers."
 
       - name: avg_risk_score
         sql: "AVG(0.4 * Avg_Utilization_Ratio + 0.3 * Total_Revolving_Bal + 0.5 * Delinquent_Acc - 0.2 * Credit_Limit - 0.1 * Total_Trans_Amt)"

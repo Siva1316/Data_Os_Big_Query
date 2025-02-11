@@ -1,4 +1,4 @@
-name: siva-handson-bundle-updated
+name: credit-card-insights-bundle-siva
 version: v1beta
 type: bundle
 tags:
@@ -8,13 +8,5 @@ layer: "user"
 bundle:
   resources:
     - id: lens
-      file: C:\Users\DELL\Desktop\DataOS\dataos-ctl-windows-amd64\windows-amd64\Practise_Data_Os\Sematic_model\Deployment_Lens.yml
-      workspace: public
-
-    - id: hotel_click_booking_updated
-      file: C:\Users\DELL\Desktop\DataOS\dataos-ctl-windows-amd64\windows-amd64\Practise_Data_Os\Data_Ingestion_Folder\Data_Ingestion_HCB.yml
-      workspace: public
-      
-    - id: hotel_booking-updated
-      file: C:\Users\DELL\Desktop\DataOS\dataos-ctl-windows-amd64\windows-amd64\Practise_Data_Os\Data_Ingestion_Folder\Data_Ingestion_Loc_Hiery.yml
+      file: C:\Users\DELL\Desktop\DataOS\dataos-ctl-windows-amd64\windows-amd64\Data_Os_Big_Query\Semantic_model\Deployment_Lens.yml
       workspace: public
