@@ -57,7 +57,7 @@ tables:
         column: "{credit_card_data.Total_Revolving_Bal}"
         description: "The total revolving balance of the customer."
 
-      - name: Delinquent_Acc
+      - name: Delin_Acc
         type: number
         column: "{credit_card_data.Delinquent_Acc}"
         description: "The number of delinquent accounts for the customer."
@@ -74,8 +74,7 @@ tables:
       #   description: "The total number of unique clients in the dataset."
 
       - name: total_delinquent_accounts
-        sql: |
-          "SUM({Delinquent_Acc})"
+        sql: "SUM({Delin_Acc})"
         type: number
         description: "The total number of delinquent accounts across all customers."
 
@@ -86,7 +85,7 @@ tables:
       #   description: "The percentage of customers who have at least one delinquent account."
 
       - name: loan_penetration_rate
-        sql: "SUM(CASE WHEN Personal_loan THEN 1 ELSE 0 END) * 1.0 / COUNT(DISTINCT Client_Num)"
+        sql: "SUM(CASE WHEN {Personal_loan} THEN 1 ELSE 0 END) * 1.0 / COUNT(DISTINCT {Client_Num})"
         type: number
         description: "The percentage of customers who have taken a personal loan."
 
