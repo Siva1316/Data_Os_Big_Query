@@ -8,7 +8,7 @@ tables:
       - name: credit_card_data
         relationship: one_to_many
         sql: >
-          "{TABLE.Client_Num} = {credit_card_data.Client_Num}"
+          "{customer_data.Client_Num} = {credit_card_data.Client_Num}"
 
     dimensions:
       - name: Client_Num
