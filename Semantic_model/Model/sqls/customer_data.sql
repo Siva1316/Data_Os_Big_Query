@@ -5,4 +5,4 @@ SELECT
     Income,
     Cust_Satisfaction_Score
 FROM
-    lakehouse.siva.costomer_data_cc;
+    lakehouse.siva.costomer_data_cc

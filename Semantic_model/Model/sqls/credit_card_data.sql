@@ -48,4 +48,4 @@ SELECT
 
 
 FROM 
-    lakehouse.siva.credit_data_cc;
+    lakehouse.siva.credit_data_cc
