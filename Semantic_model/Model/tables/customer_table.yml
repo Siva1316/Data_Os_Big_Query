@@ -68,10 +68,10 @@ tables:
         description: "This column describes the start date of the week."
 
     measures:
-      - name: total_clients
-        sql: "COUNT(DISTINCT Client_Num)"
-        type: number
-        description: "The total number of unique clients in the dataset."
+      # - name: total_clients
+      #   sql: "COUNT(DISTINCT Client_Num)"
+      #   type: number
+      #   description: "The total number of unique clients in the dataset."
 
       - name: total_delinquent_accounts
         sql: |
@@ -79,61 +79,61 @@ tables:
         type: number
         description: "The total number of delinquent accounts across all customers."
 
-      - name: delinquency_rate
-        sql: |
-          "SUM({Delinquent_Acc}) * 1.0 / COUNT(DISTINCT Client_Num)"
-        type: number
-        description: "The percentage of customers who have at least one delinquent account."
+      # - name: delinquency_rate
+      #   sql: |
+      #     "SUM({Delinquent_Acc}) * 1.0 / COUNT(DISTINCT Client_Num)"
+      #   type: number
+      #   description: "The percentage of customers who have at least one delinquent account."
 
       - name: loan_penetration_rate
         sql: "SUM(CASE WHEN Personal_loan THEN 1 ELSE 0 END) * 1.0 / COUNT(DISTINCT Client_Num)"
         type: number
         description: "The percentage of customers who have taken a personal loan."
 
-      - name: Risk_Category
-        type: string
-        sql: |
-          CASE 
-            WHEN 
-              CASE 
-                WHEN (10 * (
-                    0.4 * COALESCE(Avg_Utilization_Ratio, 0) + 
-                    0.3 * COALESCE(Total_Revolving_Bal, 0) / 10000 + 
-                    0.5 * COALESCE(Delinquent_Acc, 0) - 
-                    0.2 * COALESCE(Credit_Limit, 0) / 10000 - 
-                    0.1 * COALESCE(Total_Trans_Amt, 0) / 10000
-                )) > 1 THEN 1  
-                WHEN (10 * (
-                    0.4 * COALESCE(Avg_Utilization_Ratio, 0) + 
-                    0.3 * COALESCE(Total_Revolving_Bal, 0) / 10000 + 
-                    0.5 * COALESCE(Delinquent_Acc, 0) - 
-                    0.2 * COALESCE(Credit_Limit, 0) / 10000 - 
-                    0.1 * COALESCE(Total_Trans_Amt, 0) / 10000
-                )) < 0 THEN 0  
-                ELSE 
-                    (10 * (
-                        0.4 * COALESCE(Avg_Utilization_Ratio, 0) + 
-                        0.3 * COALESCE(Total_Revolving_Bal, 0) / 10000 + 
-                        0.5 * COALESCE(Delinquent_Acc, 0) - 
-                        0.2 * COALESCE(Credit_Limit, 0) / 10000 - 
-                        0.1 * COALESCE(Total_Trans_Amt, 0) / 10000
-                    ))
-              END > 0.7 THEN 'Risky'
-            ELSE 'Not Risky'
-          END
-        description: "Categorization of customers based on their Risk Score."
+      # - name: Risk_Category
+      #   type: string
+      #   sql: |
+      #     CASE 
+      #       WHEN 
+      #         CASE 
+      #           WHEN (10 * (
+      #               0.4 * COALESCE(Avg_Utilization_Ratio, 0) + 
+      #               0.3 * COALESCE(Total_Revolving_Bal, 0) / 10000 + 
+      #               0.5 * COALESCE(Delinquent_Acc, 0) - 
+      #               0.2 * COALESCE(Credit_Limit, 0) / 10000 - 
+      #               0.1 * COALESCE(Total_Trans_Amt, 0) / 10000
+      #           )) > 1 THEN 1  
+      #           WHEN (10 * (
+      #               0.4 * COALESCE(Avg_Utilization_Ratio, 0) + 
+      #               0.3 * COALESCE(Total_Revolving_Bal, 0) / 10000 + 
+      #               0.5 * COALESCE(Delinquent_Acc, 0) - 
+      #               0.2 * COALESCE(Credit_Limit, 0) / 10000 - 
+      #               0.1 * COALESCE(Total_Trans_Amt, 0) / 10000
+      #           )) < 0 THEN 0  
+      #           ELSE 
+      #               (10 * (
+      #                   0.4 * COALESCE(Avg_Utilization_Ratio, 0) + 
+      #                   0.3 * COALESCE(Total_Revolving_Bal, 0) / 10000 + 
+      #                   0.5 * COALESCE(Delinquent_Acc, 0) - 
+      #                   0.2 * COALESCE(Credit_Limit, 0) / 10000 - 
+      #                   0.1 * COALESCE(Total_Trans_Amt, 0) / 10000
+      #               ))
+      #         END > 0.7 THEN 'Risky'
+      #       ELSE 'Not Risky'
+      #     END
+      #   description: "Categorization of customers based on their Risk Score."
 
-      - name: risky_customer_percentage
-        sql: |
-          (COUNT(DISTINCT CASE 
-            WHEN (10 * (
-                    0.4 * COALESCE(Avg_Utilization_Ratio, 0) + 
-                    0.3 * COALESCE(Total_Revolving_Bal, 0) / 10000 + 
-                    0.5 * COALESCE(Delinquent_Acc, 0) - 
-                    0.2 * COALESCE(Credit_Limit, 0) / 10000 - 
-                    0.1 * COALESCE(Total_Trans_Amt, 0) / 10000
-                )) > 0.7 
-            THEN credit_card_data.Client_Num 
-          END) * 100.0)  / NULLIF(COUNT(DISTINCT Client_Num), 0)
-        type: number
-        description: "The percentage of customers who are categorized as 'Risky'."
+      # - name: risky_customer_percentage
+      #   sql: |
+      #     (COUNT(DISTINCT CASE 
+      #       WHEN (10 * (
+      #               0.4 * COALESCE(Avg_Utilization_Ratio, 0) + 
+      #               0.3 * COALESCE(Total_Revolving_Bal, 0) / 10000 + 
+      #               0.5 * COALESCE(Delinquent_Acc, 0) - 
+      #               0.2 * COALESCE(Credit_Limit, 0) / 10000 - 
+      #               0.1 * COALESCE(Total_Trans_Amt, 0) / 10000
+      #           )) > 0.7 
+      #       THEN credit_card_data.Client_Num 
+      #     END) * 100.0)  / NULLIF(COUNT(DISTINCT Client_Num), 0)
+      #   type: number
+      #   description: "The percentage of customers who are categorized as 'Risky'."
