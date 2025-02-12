@@ -48,6 +48,6 @@ tables:
         description: "The total number of unique clients in the dataset."
 
       - name: total_delinquent_accounts
-        sql: "SUM(Delinquent_Acc * 1.0)"
+        sql: "SUM(Delinquent_Acc)"
         type: number
         description: "The total number of delinquent accounts across all customers."
