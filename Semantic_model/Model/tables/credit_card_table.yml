@@ -42,7 +42,7 @@ tables:
         description: "This columns describes the start date of the week"
 
     measures:
-      name: total_clients
+      - name: total_clients
         sql: "COUNT(DISTINCT Client_Num)"
         type: number
         description: "The total number of unique clients in the dataset."
