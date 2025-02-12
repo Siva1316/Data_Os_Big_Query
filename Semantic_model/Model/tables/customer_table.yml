@@ -40,52 +40,52 @@ tables:
 
       - name: Credit_Limit
         type: number
-        column: credit_card_data.Credit_Limit
+        column: "{credit_card_data.Credit_Limit}"
         description: "The credit limit assigned to the customer."
 
       - name: Total_Trans_Amt
         type: number
-        column: credit_card_data.Total_Trans_Amt
+        column: "{credit_card_data.Total_Trans_Amt}"
         description: "Total transaction amount for the customer."
 
       - name: Avg_Utilization_Ratio
         type: number
-        column: credit_card_data.Avg_Utilization_Ratio
+        column: "{credit_card_data.Avg_Utilization_Ratio}"
         description: "The average credit utilization ratio of the customer."
 
       - name: Total_Revolving_Bal
         type: number
-        column: credit_card_data.Total_Revolving_Bal
+        column: "{credit_card_data.Total_Revolving_Bal}"
         description: "The total revolving balance of the customer."
 
       - name: Delinquent_Acc
         type: number
-        column: credit_card_data.Delinquent_Acc
+        column: "{credit_card_data.Delinquent_Acc}"
         description: "The number of delinquent accounts for the customer."
       
       - name: Week_Start_Date
         type: time
-        column: credit_card_data.Week_Start_Date
+        column: "{credit_card_data.Week_Start_Date}"
         description: "This columns describes the start date of the week"
 
     measures:
       - name: total_clients
-        sql: "COUNT(DISTINCT Client_Num)"
+        sql: "COUNT(DISTINCT {Client_Num})"
         type: number
         description: "The total number of unique clients in the dataset."
 
       - name: total_delinquent_accounts
-        sql: "SUM(Delinquent_Acc)"
+        sql: "SUM({Delinquent_Acc})"
         type: number
         description: "The total number of delinquent accounts across all customers."
 
       - name: delinquency_rate
-        sql: "SUM(Delinquent_Acc) * 1.0 / COUNT(DISTINCT Client_Num)"
+        sql: "SUM({Delinquent_Acc}) * 1.0 / COUNT(DISTINCT {Client_Num})"
         type: number
         description: "The percentage of customers who have at least one delinquent account."
 
       - name: loan_penetration_rate
-        sql: "SUM(Personal_loan) * 1.0 / COUNT(DISTINCT Client_Num)"
+        sql: "SUM({Personal_loan}) * 1.0 / COUNT(DISTINCT {Client_Num})"
         type: number
         description: "The percentage of customers who have taken a personal loan."
 
@@ -93,11 +93,11 @@ tables:
         type: string
         sql: |
           CASE 
-            WHEN (0.4 * Avg_Utilization_Ratio + 
-                  0.3 * Total_Revolving_Bal + 
-                  0.5 * Delinquent_Acc - 
-                  0.2 * Credit_Limit - 
-                  0.1 * Total_Trans_Amt) > 0.7 THEN 'Risky'
+            WHEN (0.4 * {Avg_Utilization_Ratio} + 
+                  0.3 * {Total_Revolving_Bal} + 
+                  0.5 * {Delinquent_Acc} - 
+                  0.2 * {Credit_Limit} - 
+                  0.1 * {Total_Trans_Amt}) > 0.7 THEN 'Risky'
             ELSE 'Not Risky'
           END
         description: "Categorization of customers based on their Risk Score."
@@ -105,11 +105,11 @@ tables:
       - name: risky_customer_percentage
         sql: |
           (COUNT(DISTINCT CASE 
-            WHEN (0.4 * Avg_Utilization_Ratio + 
-                  0.3 * Total_Revolving_Bal + 
-                  0.5 * Delinquent_Acc - 
-                  0.2 * Credit_Limit - 
-                  0.1 * Total_Trans_Amt) > 0.7 THEN Client_Num 
-          END) * 100.0) / COUNT(DISTINCT Client_Num)
+            WHEN (0.4 * {Avg_Utilization_Ratio} + 
+                  0.3 * {Total_Revolving_Bal} + 
+                  0.5 * {Delinquent_Acc} - 
+                  0.2 * {Credit_Limit} - 
+                  0.1 * {Total_Trans_Amt}) > 0.7 THEN {Client_Num} 
+          END) * 100.0) / COUNT(DISTINCT {Client_Num})
         type: number
         description: "The percentage of customers who are categorized as 'Risky'."
