@@ -75,13 +75,13 @@ tables:
 
       - name: total_delinquent_accounts
         sql: |
-          "SUM(Delinquent_Acc)"
+          "SUM({Delinquent_Acc})"
         type: number
         description: "The total number of delinquent accounts across all customers."
 
       - name: delinquency_rate
         sql: |
-          "SUM(Delinquent_Acc) * 1.0 / COUNT(DISTINCT Client_Num)"
+          "SUM({Delinquent_Acc}) * 1.0 / COUNT(DISTINCT Client_Num)"
         type: number
         description: "The percentage of customers who have at least one delinquent account."
 
