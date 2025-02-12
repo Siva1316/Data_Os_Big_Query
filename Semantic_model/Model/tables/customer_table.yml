@@ -4,7 +4,6 @@ tables:
     description: "This table stores key details about customers related to credit cards."
     public: true
     
-    # Joining with credit_card_data to access risk metrics
     joins:
       - name: credit_card_data
         relationship: one_to_many
@@ -66,7 +65,7 @@ tables:
       - name: Week_Start_Date
         type: time
         column: "{credit_card_data.Week_Start_Date}"
-        description: "This columns describes the start date of the week"
+        description: "This column describes the start date of the week."
 
     measures:
       - name: total_clients
@@ -93,11 +92,31 @@ tables:
         type: string
         sql: |
           CASE 
-            WHEN (0.4 * credit_card_data.Avg_Utilization_Ratio + 
-                  0.3 * credit_card_data.Total_Revolving_Bal + 
-                  0.5 * credit_card_data.Delinquent_Acc - 
-                  0.2 * credit_card_data.Credit_Limit - 
-                  0.1 * credit_card_data.Total_Trans_Amt) > 0.7 THEN 'Risky'
+            WHEN 
+              CASE 
+                WHEN (10 * (
+                    0.4 * COALESCE(Avg_Utilization_Ratio, 0) + 
+                    0.3 * COALESCE(Total_Revolving_Bal, 0) / 10000 + 
+                    0.5 * COALESCE(Delinquent_Acc, 0) - 
+                    0.2 * COALESCE(Credit_Limit, 0) / 10000 - 
+                    0.1 * COALESCE(Total_Trans_Amt, 0) / 10000
+                )) > 1 THEN 1  
+                WHEN (10 * (
+                    0.4 * COALESCE(Avg_Utilization_Ratio, 0) + 
+                    0.3 * COALESCE(Total_Revolving_Bal, 0) / 10000 + 
+                    0.5 * COALESCE(Delinquent_Acc, 0) - 
+                    0.2 * COALESCE(Credit_Limit, 0) / 10000 - 
+                    0.1 * COALESCE(Total_Trans_Amt, 0) / 10000
+                )) < 0 THEN 0  
+                ELSE 
+                    (10 * (
+                        0.4 * COALESCE(Avg_Utilization_Ratio, 0) + 
+                        0.3 * COALESCE(Total_Revolving_Bal, 0) / 10000 + 
+                        0.5 * COALESCE(Delinquent_Acc, 0) - 
+                        0.2 * COALESCE(Credit_Limit, 0) / 10000 - 
+                        0.1 * COALESCE(Total_Trans_Amt, 0) / 10000
+                    ))
+              END > 0.7 THEN 'Risky'
             ELSE 'Not Risky'
           END
         description: "Categorization of customers based on their Risk Score."
@@ -105,11 +124,13 @@ tables:
       - name: risky_customer_percentage
         sql: |
           (COUNT(DISTINCT CASE 
-            WHEN (0.4 * credit_card_data.Avg_Utilization_Ratio + 
-                  0.3 * credit_card_data.Total_Revolving_Bal + 
-                  0.5 * credit_card_data.Delinquent_Acc - 
-                  0.2 * credit_card_data.Credit_Limit - 
-                  0.1 * credit_card_data.Total_Trans_Amt) > 0.7 
+            WHEN (10 * (
+                    0.4 * COALESCE(credit_card_data.Avg_Utilization_Ratio, 0) + 
+                    0.3 * COALESCE(credit_card_data.Total_Revolving_Bal, 0) / 10000 + 
+                    0.5 * COALESCE(credit_card_data.Delinquent_Acc, 0) - 
+                    0.2 * COALESCE(credit_card_data.Credit_Limit, 0) / 10000 - 
+                    0.1 * COALESCE(credit_card_data.Total_Trans_Amt, 0) / 10000
+                )) > 0.7 
             THEN credit_card_data.Client_Num 
           END) * 100.0)  / NULLIF(COUNT(DISTINCT credit_card_data.Client_Num), 0)
         type: number
