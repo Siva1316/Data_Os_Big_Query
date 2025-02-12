@@ -1,5 +1,5 @@
 version: v1
-name: siva-handsondp-scan-updated
+name: credit-card-insights-op-scanner
 type: workflow
 tags:
   - scanner
@@ -22,4 +22,4 @@ workflow:
               markDeletedDataProducts: true
               dataProductFilterPattern:
                 includes:
-                 - credircard-analysis-dp-siva
+                 - credircard-analysis-dp-siva 

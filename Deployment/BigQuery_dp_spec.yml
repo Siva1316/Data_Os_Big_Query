@@ -4,16 +4,13 @@ entity: product
 type: data
 tags:
   - DPDomain.creditcardinsights
+  - DPUsecase.Customer Segmentation
 description: credit card analysis.
-
-refs:
-- title: sivahandsondp
-  href: https://dataos.info/interfaces/cli/command_reference/#workspace
 
 v1beta:
   data:
     meta:
-      title: siva hands on dp
+      title: credit card insights dp
       sourceCodeUrl: https://github.com/Siva1316/Data_Os_Big_Query
  
     collaborators:

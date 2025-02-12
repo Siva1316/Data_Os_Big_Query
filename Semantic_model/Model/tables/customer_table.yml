@@ -65,7 +65,7 @@ tables:
       
       - name: Week_Start_Date
         type: time
-        column: Week_Start_Date
+        column: credit_card_data.Week_Start_Date
         description: "This columns describes the start date of the week"
 
     measures:
@@ -74,23 +74,13 @@ tables:
         type: number
         description: "The total number of unique clients in the dataset."
 
-      - name: avg_credit_limit
-        sql: "AVG(credit_card_data.Credit_Limit)"
-        type: number
-        description: "The average credit limit across all customers."
-
-      - name: total_transaction_amount
-        sql: "SUM(credit_card_data.Total_Trans_Amt)"
-        type: number
-        description: "The total value of all transactions made by customers."
-
       - name: total_delinquent_accounts
-        sql: "SUM(credit_card_data.Delinquent_Acc)"
+        sql: "SUM(Delinquent_Acc)"
         type: number
         description: "The total number of delinquent accounts across all customers."
 
       - name: delinquency_rate
-        sql: "SUM(credit_card_data.Delinquent_Acc) * 1.0 / COUNT(DISTINCT Client_Num)"
+        sql: "SUM(Delinquent_Acc) * 1.0 / COUNT(DISTINCT Client_Num)"
         type: number
         description: "The percentage of customers who have at least one delinquent account."
 
@@ -99,54 +89,27 @@ tables:
         type: number
         description: "The percentage of customers who have taken a personal loan."
 
-      - name: Risk_Score
-        type: number
-        sql: |
-          (0.4 * credit_card_data.Avg_Utilization_Ratio + 
-           0.3 * credit_card_data.Total_Revolving_Bal + 
-           0.5 * credit_card_data.Delinquent_Acc - 
-           0.2 * credit_card_data.Credit_Limit - 
-           0.1 * credit_card_data.Total_Trans_Amt)
-        description: "A calculated score indicating the risk level of a customer."
-      
-      - name: avg_risk_score
-        sql: "AVG(0.4 * credit_card_data.Avg_Utilization_Ratio + 0.3 * credit_card_data.Total_Revolving_Bal + 0.5 * credit_card_data.Delinquent_Acc - 0.2 * credit_card_data.Credit_Limit - 0.1 * credit_card_data.Total_Trans_Amt)"
-        type: number
-        description: "The average risk score of all customers."
-
       - name: Risk_Category
         type: string
         sql: |
           CASE 
-            WHEN (0.4 * credit_card_data.Avg_Utilization_Ratio + 
-                  0.3 * credit_card_data.Total_Revolving_Bal + 
-                  0.5 * credit_card_data.Delinquent_Acc - 
-                  0.2 * credit_card_data.Credit_Limit - 
-                  0.1 * credit_card_data.Total_Trans_Amt) > 0.7 THEN 'Risky'
+            WHEN (0.4 * Avg_Utilization_Ratio + 
+                  0.3 * Total_Revolving_Bal + 
+                  0.5 * Delinquent_Acc - 
+                  0.2 * Credit_Limit - 
+                  0.1 * Total_Trans_Amt) > 0.7 THEN 'Risky'
             ELSE 'Not Risky'
           END
         description: "Categorization of customers based on their Risk Score."
 
-      - name: total_risky_customers
-        sql: |
-          COUNT(DISTINCT CASE 
-            WHEN (0.4 * credit_card_data.Avg_Utilization_Ratio + 
-                  0.3 * credit_card_data.Total_Revolving_Bal + 
-                  0.5 * credit_card_data.Delinquent_Acc - 
-                  0.2 * credit_card_data.Credit_Limit - 
-                  0.1 * credit_card_data.Total_Trans_Amt) > 0.7 THEN Client_Num 
-          END)
-        type: number
-        description: "The total number of customers categorized as 'Risky'."
-
       - name: risky_customer_percentage
         sql: |
           (COUNT(DISTINCT CASE 
-            WHEN (0.4 * credit_card_data.Avg_Utilization_Ratio + 
-                  0.3 * credit_card_data.Total_Revolving_Bal + 
-                  0.5 * credit_card_data.Delinquent_Acc - 
-                  0.2 * credit_card_data.Credit_Limit - 
-                  0.1 * credit_card_data.Total_Trans_Amt) > 0.7 THEN Client_Num 
+            WHEN (0.4 * Avg_Utilization_Ratio + 
+                  0.3 * Total_Revolving_Bal + 
+                  0.5 * Delinquent_Acc - 
+                  0.2 * Credit_Limit - 
+                  0.1 * Total_Trans_Amt) > 0.7 THEN Client_Num 
           END) * 100.0) / COUNT(DISTINCT Client_Num)
         type: number
         description: "The percentage of customers who are categorized as 'Risky'."
