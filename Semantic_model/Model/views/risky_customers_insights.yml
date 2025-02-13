@@ -15,7 +15,7 @@ views:
       - join_path: customer_data
         prefix: true
         includes: 
-          - risky_customer_percentage  # measure
+          - total_risk_customer  # measure
           - Avg_Utilization_Ratio    # measure columns
           - Total_Revolving_Bal
           - Delinquent_Acc
