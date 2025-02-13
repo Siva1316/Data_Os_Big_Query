@@ -77,6 +77,11 @@ tables:
         sql: "SUM(CASE WHEN {Personal_loan} THEN 1 ELSE 0 END) * 1.0 / COUNT(DISTINCT {Client_Num})"
         type: number
         description: "The percentage of customers who have taken a personal loan."
+      
+      - name: delinquency_rate
+        sql: "SUM({Delin_Acc}) * 1.0 / COUNT(DISTINCT {Client_Num})"
+        type: number
+        description: "The percentage of customers who have at least one delinquent account."
 
       - name: Risk_Category
         type: number

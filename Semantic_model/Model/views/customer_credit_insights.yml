@@ -15,7 +15,11 @@ views:
       - join_path: customer_data
         prefix: true
         includes: 
-          - delinquency_rate  # measure
-          - Delin_Acc    # measure columns
+          - Risk_Category  # measure
+          - Avg_Utl_Ratio    # measure columns
+          - Total_Rev_Bal
+          - Delin_Acc
+          - Cd_Limit
+          - Total_Trns_Amt
           - Client_Num        # Groupby column
           - Week_Start_Date   # Timestamp
