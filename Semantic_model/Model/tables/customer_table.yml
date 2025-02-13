@@ -74,8 +74,7 @@ tables:
         description: "The total number of delinquent accounts across all customers."
 
       - name: delinquency_rate
-        sql: |
-          "SUM({Delin_Acc}) * 1.0 / COUNT(DISTINCT {Client_Num})"
+        sql: "SUM({Delin_Acc}) * 1.0 / COUNT(DISTINCT {Client_Num})"
         type: number
         description: "The percentage of customers who have at least one delinquent account."
 
@@ -99,17 +98,17 @@ tables:
           END
         description: "Categorization of customers based on their Risk Score."
 
-      - name: risky_customer_percentage
+      - name: total_risk_customer
+        type: number
         sql: |
-          (COUNT(DISTINCT CASE 
+          "SUM(CASE 
             WHEN (10 * (
                     0.4 * COALESCE({Avg_Utl_Ratio}, 0) + 
                     0.3 * COALESCE({Total_Rev_Bal}, 0) / 10000 + 
                     0.5 * COALESCE({Delin_Acc}, 0) - 
                     0.2 * COALESCE({Cd_Limit}, 0) / 10000 - 
                     0.1 * COALESCE({Total_Trns_Amt}, 0) / 10000
-                )) > 0.7 
-            THEN {Client_Num} 
-          END) * 100.0)  / NULLIF(COUNT(DISTINCT {Client_Num}), 0)
-        type: number
-        description: "The percentage of customers who are categorized as 'Risky'."
+                )) > 0.7 THEN 1
+            ELSE 0
+          END)"
+        description: "The total number of customers categorized as 'Risky'."
