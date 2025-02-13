@@ -101,7 +101,7 @@ tables:
       - name: total_risk_customer
         type: number
         sql: |
-          "SUM(CASE 
+          SUM(CASE 
             WHEN (10 * (
                     0.4 * COALESCE({Avg_Utl_Ratio}, 0) + 
                     0.3 * COALESCE({Total_Rev_Bal}, 0) / 10000 + 
@@ -110,5 +110,5 @@ tables:
                     0.1 * COALESCE({Total_Trns_Amt}, 0) / 10000
                 )) > 0.7 THEN 1
             ELSE 0
-          END)"
+          END)
         description: "The total number of customers categorized as 'Risky'."
