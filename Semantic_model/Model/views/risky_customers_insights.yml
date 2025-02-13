@@ -16,10 +16,10 @@ views:
         prefix: true
         includes: 
           - total_risk_customer  # measure
-          - Avg_Utilization_Ratio    # measure columns
-          - Total_Revolving_Bal
-          - Delinquent_Acc
-          - Credit_Limit
-          - Total_Trans_Amt
+          - Avg_Utl_Ratio    # measure columns
+          - Total_Rev_Bal
+          - Delin_Acc
+          - Cd_Limit
+          - Total_Trns_Amt
           - Client_Num        # Groupby column
           - Week_Start_Date   # Timestamp

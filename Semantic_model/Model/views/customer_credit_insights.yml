@@ -16,6 +16,6 @@ views:
         prefix: true
         includes: 
           - delinquency_rate  # measure
-          - Delinquent_Acc    # measure columns
+          - Delin_Acc    # measure columns
           - Client_Num        # Groupby column
           - Week_Start_Date   # Timestamp
