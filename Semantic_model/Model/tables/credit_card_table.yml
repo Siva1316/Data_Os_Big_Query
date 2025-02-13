@@ -43,11 +43,16 @@ tables:
 
     measures:
       - name: total_clients
-        sql: "COUNT(DISTINCT Client_Num)"
+        sql: "COUNT(DISTINCT {Client_Num})"
         type: number
         description: "The total number of unique clients in the dataset."
 
       - name: total_delinquent_accounts
-        sql: "SUM(Delinquent_Acc)"
+        sql: "SUM({Delinquent_Acc})"
         type: number
         description: "The total number of delinquent accounts across all customers."
+      
+      - name: delinquency_rate
+        sql: "SUM({Delinquent_Acc}) / COUNT(DISTINCT {Client_Num})"
+        type: number
+        description: "The percentage of customers who have at least one delinquent account."
