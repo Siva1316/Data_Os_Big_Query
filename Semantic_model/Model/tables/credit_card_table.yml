@@ -54,7 +54,6 @@ tables:
       
       - name: delinquency_rate
         sql: |
-          COUNT(DISTINCT CASE WHEN {Delinquent_Acc} > 0 THEN {Client_Num} END) * 1.0
-          / COUNT(DISTINCT {Client_Num})
+           (SUM({Delinquent_Acc})* 1.0 / COUNT(DISTINCT {Client_Num}))
         type: number
         description: "The percentage of customers who have at least one delinquent account."
